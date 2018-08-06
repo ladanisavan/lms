@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="/common/header"></head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+            	<div class="login-panel">
+            		<div th:if="${authError}">
+            			<p th:text="${session.SPRING_SECURITY_LAST_EXCEPTION}" class="error" th:unless="${session == null}"></p>
+            		</div>
+	                <div class="panel panel-default">
+	                    <div class="panel-heading">
+	                        <h3 class="panel-title">Please Sign In</h3>
+	                    </div>
+	                    <div class="panel-body">
+	                        <form role="form" th:action="@{/login}" method="POST">
+	                            <fieldset>
+	                                <div class="form-group">
+	                                    <input class="form-control" th:placeholder="E-mail" name="email" type="email" autofocus>
+	                                </div>
+	                                <div class="form-group">
+	                                    <input class="form-control" th:placeholder="Password" name="password" type="password" value="">
+	                                </div>
+	                                <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
+	                                <a th:href="@{~/oauth2/authorization/google}" class="btn btn-lg btn-danger btn-block">Google Account Login</a>
+	                            </fieldset>
+	                        </form>
+	                    </div>
+	                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<footer th:include="/common/footer"></footer>
+
+</html>
