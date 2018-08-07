@@ -2,13 +2,14 @@ package com.sl.lms.domain;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -60,4 +61,18 @@ public class Employee {
 	private Date updatedDate;
 	@Column(name = "UPDATED_BY", nullable = true, length=50)
 	private String updatedBy;
+	@OneToOne(mappedBy="employee", cascade=CascadeType.ALL)
+	private EmployeeAddress empAddr;
+	@OneToOne(mappedBy="employee", cascade=CascadeType.ALL)
+	private EmployeeLeaveBalance leaveBalance;
+	
+	public void addEmployeeAddress(EmployeeAddress employeeAddress) {
+		this.setEmpAddr(employeeAddress);
+		employeeAddress.setEmployee(this);
+	}
+	
+	public void addEmployeeLeaveBalance(EmployeeLeaveBalance employeeLeaveBalance) {
+		this.setLeaveBalance(employeeLeaveBalance);
+		employeeLeaveBalance.setEmployee(this);
+	}
 }
