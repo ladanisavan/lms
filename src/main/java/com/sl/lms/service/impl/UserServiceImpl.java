@@ -1,4 +1,4 @@
-package com.sl.lms.domain.service.impl;
+package com.sl.lms.service.impl;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -11,7 +11,7 @@ import com.sl.lms.domain.Role;
 import com.sl.lms.domain.User;
 import com.sl.lms.domain.repository.RoleRepository;
 import com.sl.lms.domain.repository.UserRepository;
-import com.sl.lms.domain.service.UserService;
+import com.sl.lms.service.UserService;
 
 @Service("userService")
 public class UserServiceImpl implements UserService{

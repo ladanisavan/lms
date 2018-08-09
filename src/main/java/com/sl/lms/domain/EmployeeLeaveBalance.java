@@ -18,8 +18,8 @@ import lombok.ToString;
 @Entity
 @Table(name = "EMP_LEAVE_BALANCE")
 @Data
-@ToString(exclude="employee")
-@EqualsAndHashCode(exclude="employee")
+@ToString(exclude = "employee")
+@EqualsAndHashCode(exclude = "employee")
 @NoArgsConstructor
 public class EmployeeLeaveBalance {
 
@@ -29,6 +29,7 @@ public class EmployeeLeaveBalance {
 	private Long id;
 	@OneToOne
 	@JoinColumn(name = "EMP_ID")
+	@NotNull
 	private Employee employee;
 	@Column(name = "CL")
 	@NotNull
@@ -39,4 +40,10 @@ public class EmployeeLeaveBalance {
 	@Column(name = "PH")
 	@NotNull
 	private Float ph;
+
+	public EmployeeLeaveBalance(Float cl, Float co, Float ph) {
+		this.cl = cl;
+		this.co = co;
+		this.ph = ph;
+	}
 }

@@ -1,4 +1,4 @@
-package com.sl.lms.domain.service;
+package com.sl.lms.service;
 
 import java.util.List;
 

@@ -3,6 +3,7 @@ package com.sl.lms.domain.repository;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -59,7 +60,7 @@ public class EmployeeRepositoryTest {
     }
     
     @Test
-    public void whenFindByEmpId_thenReturnEployee() {
+    public void whenFindByEmpId_thenReturnEmployee() {
     	//given
     	entityManager.persist(getNewEmpRecord());
     	entityManager.flush();
@@ -73,7 +74,7 @@ public class EmployeeRepositoryTest {
     }
     
     @Test
-    public void whenFindByEmailId_thenReturnEployee() {
+    public void whenFindByEmailId_thenReturnEmployee() {
     	//given
     	entityManager.persist(getNewEmpRecord());
     	entityManager.flush();
@@ -87,7 +88,7 @@ public class EmployeeRepositoryTest {
     }
     
     @Test
-    public void whenFindByEmailId_thenReturnEployeeAddress() {
+    public void whenFindByEmailId_thenReturnEmployeeAddress() {
     	//given
     	entityManager.persist(getNewEmpRecord());
     	entityManager.flush();
@@ -101,7 +102,7 @@ public class EmployeeRepositoryTest {
     }
     
     @Test
-    public void whenFindByEmailId_thenReturnEployeeLeaveBalace() {
+    public void whenFindByEmailId_thenReturnEmployeeLeaveBalace() {
     	//given
     	entityManager.persist(getNewEmpRecord());
     	entityManager.flush();
@@ -112,6 +113,20 @@ public class EmployeeRepositoryTest {
     	//then
     	assertThat(found.isPresent()).isTrue();
     	assertThat(found.get().getLeaveBalance().getPh()).isEqualTo(1f);
+    }
+    
+    @Test
+    public void whenFindAllByActive_thenReturnAllActiveEmployees() {
+    	//given
+    	entityManager.persist(getNewEmpRecord());
+    	entityManager.flush();
+    	
+    	//when
+    	List<Employee> found = employeeRepo.findAllByActive(true);
+    	
+    	//then
+    	assertThat(found.isEmpty()).isFalse();
+    	assertThat(found.size()).isEqualTo(1);
     }
     
     @Test

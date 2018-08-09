@@ -1,4 +1,4 @@
-package com.sl.lms.domain.service.impl;
+package com.sl.lms.service.impl;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sl.lms.domain.Role;
 import com.sl.lms.domain.repository.RoleRepository;
-import com.sl.lms.domain.service.RoleService;
+import com.sl.lms.service.RoleService;
 
 @Service("roleService")
 public class RoleServiceImpl implements RoleService{

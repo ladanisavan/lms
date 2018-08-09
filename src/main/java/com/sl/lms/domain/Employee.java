@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -27,43 +29,61 @@ public class Employee {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Long id;
-	@Column(name = "FIRST_NAME", nullable=false, length=50)
+	@Column(name = "FIRST_NAME")
+	@NotNull
+	@Size(max=50)
 	private String firstName;
-	@Column(name = "MIDDLE_NAME", nullable=true, length=50)
+	@Column(name = "MIDDLE_NAME")
+	@Size(max=50)
 	private String middleName;
-	@Column(name = "LAST_NAME", nullable=false, length=50)
+	@Column(name = "LAST_NAME")
+	@NotNull
+	@Size(max=50)
 	private String lastName;
-	@Column(name = "EMP_ID", nullable = false, unique = true, length=10)
+	@Column(name = "EMP_ID", unique = true)
+	@NotNull
+	@Size(max=10)
 	private String empId;
-	@Column(name = "EMAIL_ID", nullable = false, unique = true, length=255)
+	@Column(name = "EMAIL_ID", unique = true)
+	@NotNull
+	@Size(max=255)
 	private String emailId;
-	@Column(name = "DESIGNATION", nullable = false)
+	@Column(name = "DESIGNATION")
+	@NotNull
 	private String designation;
-	@Column(name = "DOB", nullable = false)
+	@Column(name = "DOB")
+	@NotNull
 	private Date dob;
-	@Column(name = "GENDER", nullable = false)
+	@Column(name = "GENDER")
+	@NotNull
 	private String gender;
-	@Column(name = "CELL_NO", nullable = true, length=10)
+	@Column(name = "CELL_NO")
+	@Size(max=10)
 	private String cellNo;
-	@Column(name = "JOINING_DATE", nullable = false)
+	@Column(name = "JOINING_DATE")
+	@NotNull
 	private Date joiningDate;
-	@Column(name = "LEAVING_DATE", nullable = true)
+	@Column(name = "LEAVING_DATE")
 	private Date leavingDate;
-	@Column(name = "ACTIVE", nullable = false)
+	@Column(name = "ACTIVE")
 	private boolean active;
-	@Column(name = "CREATED_DATE", nullable = false)
+	@Column(name = "CREATED_DATE")
 	@CreationTimestamp
 	private Date createdDate;
-	@Column(name = "CREATED_BY", nullable = false, length=50)
+	@Column(name = "CREATED_BY")
+	@NotNull
+	@Size(max=50)
 	private String createdBy;
-	@Column(name = "UPDATE_DATE", nullable = true)
+	@Column(name = "UPDATE_DATE")
 	@UpdateTimestamp
 	private Date updatedDate;
-	@Column(name = "UPDATED_BY", nullable = true, length=50)
+	@Column(name = "UPDATED_BY")
+	@Size(max=50)
 	private String updatedBy;
 	@OneToOne(mappedBy="employee", cascade=CascadeType.ALL)
 	private EmployeeAddress empAddr;
 	@OneToOne(mappedBy="employee", cascade=CascadeType.ALL)
+	@NotNull
 	private EmployeeLeaveBalance leaveBalance;
 	
 	public void addEmployeeAddress(EmployeeAddress employeeAddress) {
