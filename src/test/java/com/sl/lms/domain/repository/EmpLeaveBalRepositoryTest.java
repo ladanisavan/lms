@@ -33,7 +33,7 @@ public class EmpLeaveBalRepositoryTest {
     	emp.setLastName("Doe");
     	emp.setEmpId("NAL20");
     	emp.setDesignation("Sr. Software Engineer");
-    	emp.setEmailId("john.doe@nividous.com");
+    	emp.setEmailId("john.doe@someemail.com");
     	emp.setDob(new GregorianCalendar(1987, 11, 25).getTime());
     	emp.setGender("Male");
     	emp.setJoiningDate(new GregorianCalendar(2014, 04, 25).getTime());

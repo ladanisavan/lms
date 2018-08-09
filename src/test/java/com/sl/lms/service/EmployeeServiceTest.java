@@ -43,7 +43,7 @@ public class EmployeeServiceTest {
     	 Employee john = new Employee();
          john.setFirstName("John");
          john.setLastName("Doe");
-         john.setEmailId("john.doe@gmail.com");
+         john.setEmailId("john.doe@someemail.com");
          john.setEmpId("NAL20");
          return john;
     }
@@ -104,7 +104,7 @@ public class EmployeeServiceTest {
     @Test
     public void whenValidEmailId_thenEmployeeShouldBeFound() {
     	//given
-        String emailId = "john.doe@gmail.com";
+        String emailId = "john.doe@someemail.com";
         
         //when
         Optional<Employee> found = employeeService.getEmployeeByEmailId(emailId);

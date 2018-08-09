@@ -33,7 +33,7 @@ public class EmployeeRepositoryTest {
     	emp.setLastName("Doe");
     	emp.setEmpId("NAL20");
     	emp.setDesignation("Sr. Software Engineer");
-    	emp.setEmailId("john.doe@nividous.com");
+    	emp.setEmailId("john.doe@someemail.com");
     	emp.setDob(new GregorianCalendar(1987, 11, 25).getTime());
     	emp.setGender("Male");
     	emp.setJoiningDate(new GregorianCalendar(2014, 04, 25).getTime());
@@ -80,7 +80,7 @@ public class EmployeeRepositoryTest {
     	entityManager.flush();
     	
     	//when
-    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@nividous.com");
+    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@someemail.com");
     	
     	//then
     	assertThat(found.isPresent()).isTrue();
@@ -94,7 +94,7 @@ public class EmployeeRepositoryTest {
     	entityManager.flush();
     	
     	//when
-    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@nividous.com");
+    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@someemail.com");
     	
     	//then
     	assertThat(found.isPresent()).isTrue();
@@ -108,7 +108,7 @@ public class EmployeeRepositoryTest {
     	entityManager.flush();
     	
     	//when
-    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@nividous.com");
+    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@someemail.com");
     	
     	//then
     	assertThat(found.isPresent()).isTrue();
@@ -135,7 +135,7 @@ public class EmployeeRepositoryTest {
     	entityManager.persist(getNewEmpRecord());
     	entityManager.flush();
     	
-    	Optional<Employee> orgRecord = employeeRepo.findByEmailId("john.doe@nividous.com");
+    	Optional<Employee> orgRecord = employeeRepo.findByEmailId("john.doe@someemail.com");
     	
     	Employee emp = orgRecord.get();
     	EmployeeLeaveBalance newBalance = new EmployeeLeaveBalance();
@@ -146,7 +146,7 @@ public class EmployeeRepositoryTest {
     	
     	//when
     	employeeRepo.saveAndFlush(emp);
-    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@nividous.com");
+    	Optional<Employee> found = employeeRepo.findByEmailId("john.doe@someemail.com");
     	
     	//then
     	assertThat(found.isPresent()).isTrue();

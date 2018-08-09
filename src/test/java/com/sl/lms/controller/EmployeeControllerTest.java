@@ -14,20 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 
-import javax.sql.DataSource;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -35,9 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.sl.lms.configuration.SecurityConfigurationTest;
-import com.sl.lms.configuration.auth.handler.LoginFailureHandler;
-import com.sl.lms.configuration.auth.handler.LoginSuccessHandler;
-import com.sl.lms.configuration.auth.helper.LoginAuthHelper;
 import com.sl.lms.domain.Employee;
 import com.sl.lms.domain.EmployeeAddress;
 import com.sl.lms.domain.EmployeeLeaveBalance;
@@ -54,32 +42,13 @@ public class EmployeeControllerTest {
 	@MockBean
     private EmployeeService service;
 	
-	/*
-	@MockBean
-	private ClientRegistrationRepository clientRegistrationRepository;
-	
-	@MockBean
-	LoginSuccessHandler successHandler;
-	
-	@MockBean
-	LoginFailureHandler failureHandler;
-	
-	@MockBean
-	LoginAuthHelper loginAuthHelper;
-	
-	@MockBean
-	private BCryptPasswordEncoder bCryptPasswordEncoder;*/
-
-	@MockBean
-	private DataSource dataSource;
-	
 	private Employee getNewEmpRecord() {
     	Employee emp = new Employee();
     	emp.setFirstName("John");
     	emp.setLastName("Doe");
     	emp.setEmpId("NAL20");
     	emp.setDesignation("Sr. Software Engineer");
-    	emp.setEmailId("john.doe@nividous.com");
+    	emp.setEmailId("john.doe@someemail.com");
     	emp.setDob(new GregorianCalendar(1987, 11, 25).getTime());
     	emp.setGender("Male");
     	emp.setJoiningDate(new GregorianCalendar(2014, 04, 25).getTime());
@@ -106,7 +75,7 @@ public class EmployeeControllerTest {
     }
 	
 	@Test
-	@WithMockUser(username = "admin", password="password", roles={"USER"})
+	@WithMockUser(username = "username", roles={"ADMIN"})
 	public void givenAllActiveEmployees_whenListEmployees_thenReturnAllActiveEmployees()
 	  throws Exception {
 	     
@@ -121,7 +90,7 @@ public class EmployeeControllerTest {
 	      .andExpect(model().attribute("employees", hasItem(allOf(
 	    		  hasProperty("firstName", is("John")),
 	    		  hasProperty("lastName", is("Doe")),
-	    		  hasProperty("emailId", is("john.doe@nividous.com"))
+	    		  hasProperty("emailId", is("john.doe@someemail.com"))
           )))).andDo(MockMvcResultHandlers.print());
 	}
 }
