@@ -1,5 +1,6 @@
 package com.sl.lms.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.CascadeType;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "EMPLOYEE")
 @Data
 @NoArgsConstructor
-public class Employee {
+public class Employee implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -74,7 +75,7 @@ public class Employee {
 	@NotNull
 	@Size(max=50)
 	private String createdBy;
-	@Column(name = "UPDATE_DATE")
+	@Column(name = "UPDATED_DATE")
 	@UpdateTimestamp
 	private Date updatedDate;
 	@Column(name = "UPDATED_BY")

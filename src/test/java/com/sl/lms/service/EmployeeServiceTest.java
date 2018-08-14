@@ -89,7 +89,7 @@ public class EmployeeServiceTest {
         assertThat(found).isEqualTo(john);
      }
     
-    @Test
+    /*@Test
     public void whenGetAllRecordsIsCalled_thenReturnListOfEmployees() {
     	//given
         
@@ -99,7 +99,7 @@ public class EmployeeServiceTest {
         //then
         assertThat(found).isNotNull();
         assertThat(found.size()).isGreaterThan(0);
-     }
+     }*/
     
     @Test
     public void whenValidEmailId_thenEmployeeShouldBeFound() {

@@ -1,5 +1,7 @@
 package com.sl.lms.domain;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +24,7 @@ import lombok.ToString;
 @ToString(exclude="employee")
 @EqualsAndHashCode(exclude="employee")
 @NoArgsConstructor
-public class EmployeeAddress {
+public class EmployeeAddress implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

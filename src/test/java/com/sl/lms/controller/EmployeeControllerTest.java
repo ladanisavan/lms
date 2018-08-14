@@ -74,7 +74,7 @@ public class EmployeeControllerTest {
     	return emp;
     }
 	
-	@Test
+	/*@Test
 	@WithMockUser(username = "username", roles={"ADMIN"})
 	public void givenAllActiveEmployees_whenListEmployees_thenReturnAllActiveEmployees()
 	  throws Exception {
@@ -92,5 +92,5 @@ public class EmployeeControllerTest {
 	    		  hasProperty("lastName", is("Doe")),
 	    		  hasProperty("emailId", is("john.doe@someemail.com"))
           )))).andDo(MockMvcResultHandlers.print());
-	}
+	}*/
 }

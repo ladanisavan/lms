@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
@@ -31,6 +33,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 		handle(request, response, authentication);
+		saveCurrentLoginUserDetails(request, authentication);
 		clearAuthenticationAttributes(request);
 		LOGGER.debug("login successful for user: {}",authentication.getName());
 	}
@@ -61,6 +64,18 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			return URLConstants.HOME_URL;
 		}
 	}
+	
+	protected void saveCurrentLoginUserDetails(HttpServletRequest request, Authentication authentication) {
+		HttpSession session = request.getSession(false);
+		if(session!=null) {
+			if(authentication.getPrincipal() instanceof User) {
+				session.setAttribute("currentUserEmail", ((User)authentication.getPrincipal()).getUsername());
+			}else if(authentication.getPrincipal() instanceof DefaultOidcUser) {
+				session.setAttribute("currentUserEmail", ((DefaultOidcUser)authentication.getPrincipal()).getAttributes().get("email"));
+			}
+		}
+	}
+	
 
 	protected void clearAuthenticationAttributes(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
