@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: header"></head>
+<style>
+td h4{
+	padding-left: 5px;
+}
+</style>
+<body>
+	<div id="wrapper">
+		<div th:replace="common/menu :: menu"></div>
+		<div id="page-wrapper">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header">Employee Details</h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading"><i class="fa fa-user-circle-o" aria-hidden="true"></i> Basic Details <a href="#"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true" title="edit details"></i></a></div>
+						<div class="panel-body">
+							<table>
+								<tr>
+									<td><h5><strong>Name:</strong></h5></td>
+									<td><h4><small th:text="|${employee.firstName} ${employee.middleName} ${employee.lastName}|">John Doe</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5><strong>Emp ID:</strong></h5></td>
+									<td><h4><small th:text="${employee.empId}">EMP20</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5><strong>Email:</strong></h5></td>
+									<td><h4><small th:text="${employee.emailId}">john.doe@someemail.com</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5><strong>Desig:</strong></h5></td>
+									<td><h4><small th:text="${employee.designation}">Sr. Software Engineer</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5><strong>Gender:</strong></h5></td>
+									<td><h4><small th:text="${employee.gender}">Male</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5><strong>DOB:</strong></h5></td>
+									<td><h4><small th:text="${#calendars.format(employee.dob,'dd MMMM yyyy')}">1987-12-25</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5><strong>Joining:</strong></h5></td>
+									<td><h4><small th:text="${#calendars.format(employee.joiningDate,'dd MMMM yyyy')}">25 May, 2014</small></h4></td>
+								</tr>
+								<tr>
+									<td><h5><strong>Cell No:</strong></h5></td>
+									<td><h4><small th:text="${employee.cellNo}">1234567890</small></h4></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading"><i class="fa fa-address-book-o" aria-hidden="true"></i> Address</div>
+						<div class="panel-body">
+							<address style="margin-bottom: 0px;">
+                                <span th:text="|${employee.empAddr.address1},|" class="text-muted">Address line 1,</span>
+                                <span th:if="${employee.empAddr.address2 != null}">
+                                	<br><span th:text="|${employee.empAddr.address2},|" class="text-muted">Address line 2,</span>
+                                </span>
+                                <br><span th:text="|${employee.empAddr.city},|" class="text-muted">City,</span>
+                                <br><span th:text="${employee.empAddr.state}" class="text-muted">state</span>
+                                <span th:if="${employee.empAddr.zipCode != null}" th:text="| - ${employee.empAddr.zipCode}|" class="text-muted"> - 123456</span>
+                                <br><span th:text="${employee.empAddr.country}" class="text-muted">country</span>
+                            </address>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="panel panel-default">
+						<div class="panel-heading">Leave Details <a href="#"><i class="fa fa-pencil-square-o pull-right" aria-hidden="true" title="edit details"></i></a></div>
+						<div class="panel-body">
+							<div class="col-lg-12">
+								<div class="col-lg-4" style="padding:0px">
+									<h5>CL <span class="text-muted" style="font-size: 40px" th:text="${#numbers.formatDecimal(employee.leaveBalance.cl,1,2)}">N/A</span></h5>
+								</div>
+								<div class="col-lg-4" style="padding:0px">
+									<h5>CO <span class="text-muted" style="font-size: 40px" th:text="${#numbers.formatDecimal(employee.leaveBalance.co,1,2)}">N/A</span></h5>
+								</div>
+								<div class="col-lg-4" style="padding:0px">
+									<h5>PH <span class="text-muted" style="font-size: 40px" th:text="${#numbers.formatDecimal(employee.leaveBalance.ph,1,2)}">N/A</span></h5>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<footer th:replace="common/footer :: footer"></footer>
+</html>

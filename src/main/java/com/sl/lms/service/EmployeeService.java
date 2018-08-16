@@ -12,8 +12,10 @@ import com.sl.lms.util.DTResponse;
 public interface EmployeeService {
 	Employee createEmployee(Employee employee);
 	Employee updateEmployee(Employee employee);
-	boolean deactivateEmployee(Long id, String updatedBy);
+	boolean deactivateEmployee(Long id);
 	DTResponse<EmployeeDTO> searchEmployees(Specification<Employee> specs, Pageable pageable);
 	Optional<Employee> getEmployeeByEmpId(String empId);
 	Optional<Employee> getEmployeeByEmailId(String emailId);
+	Optional<Employee> getEmployeeById(Long id);
+	boolean isEmployeeExists(String emailId, boolean actie);
 }

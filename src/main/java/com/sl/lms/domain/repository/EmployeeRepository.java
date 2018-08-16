@@ -15,7 +15,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 	Optional<Employee> findByEmpId(String empNo);
 	Optional<Employee> findByEmailId(String emailId);
 	Page<Employee> findByActive(boolean active, Pageable pageable);
-	Long countByActive(boolean active);
+	long countByActive(boolean active);
+	long countByEmailIdAndActive(String emailId, boolean active);
 	@Modifying
 	@Query("update Employee emp set emp.active = false where emp.id = ?1")
 	int deactivateEmployee(Long id);

@@ -1,6 +1,5 @@
 package com.sl.lms.service.impl;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,7 +25,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private EmployeeRepository empRepo;
 	private CurrentUserHolder currentUserHolder;
-	
+
 	public EmployeeServiceImpl(EmployeeRepository empRepo, CurrentUserHolder currentUserHolder) {
 		this.empRepo = empRepo;
 		this.currentUserHolder = currentUserHolder;
@@ -56,18 +55,32 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public DTResponse<EmployeeDTO> searchEmployees(Specification<Employee> specs, Pageable pageable) {
-		//returning only active employee records
+		// returning only active employee records
+		Specification<Employee> defaultActiveSpec = new EmployeeSpecification(new SearchCriteria("active", ":", true));
 		if (specs != null) {
-			specs = specs.and(new EmployeeSpecification(new SearchCriteria("active",":",true)));
+			specs = specs.and(defaultActiveSpec);
 		} else {
-			specs = new EmployeeSpecification(new SearchCriteria("active",":",true));
+			specs = defaultActiveSpec;
 		}
-		List<EmployeeDTO> resultList = empRepo.findAll(specs, pageable).stream().map(this::mapToEmployeeDto)
-				.collect(Collectors.toList());
-
-		return new DTResponse<EmployeeDTO>(0, empRepo.countByActive(true), empRepo.count(specs), resultList);
+		return new DTResponse<EmployeeDTO>(0, empRepo.countByActive(true), empRepo.count(specs),
+				empRepo.findAll(specs, pageable).stream().map(this::mapToEmployeeDto).collect(Collectors.toList()));
 	}
 
+	@Override
+	public boolean deactivateEmployee(Long id) {
+		Optional<Employee> emp = empRepo.findById(id);
+		Assert.isTrue(emp.isPresent(), "Employee record not found by id: " + id);
+		emp.get().setActive(false);
+		emp.get().setUpdatedBy(currentUserHolder.currentUserEmail());
+		empRepo.save(emp.get());
+		return true;
+	}
+
+	@Override
+	public Optional<Employee> getEmployeeById(Long id) {
+		return empRepo.findById(id);
+	}
+	
 	private EmployeeDTO mapToEmployeeDto(Employee emp) {
 		EmployeeDTO employeeDTO = new EmployeeDTO();
 		BeanUtils.copyProperties(emp, employeeDTO);
@@ -75,13 +88,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public boolean deactivateEmployee(Long id, String updatedBy) {
-		Optional<Employee> emp = empRepo.findById(id);
-		Assert.isTrue(emp.isPresent(),"Employee record not found by id: "+id);
-		emp.get().setActive(false);
-		emp.get().setUpdatedBy(currentUserHolder.currentUserEmail());
-		empRepo.save(emp.get());
-		return true;
+	public boolean isEmployeeExists(String emailId, boolean active) {
+		return empRepo.countByEmailIdAndActive(emailId, active)>0;
 	}
 
 }

@@ -1,13 +1,9 @@
 package com.sl.lms.service.impl;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.sl.lms.domain.Role;
 import com.sl.lms.domain.User;
 import com.sl.lms.domain.repository.RoleRepository;
 import com.sl.lms.domain.repository.UserRepository;

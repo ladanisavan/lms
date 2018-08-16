@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.common.base.Strings;
 import com.sl.lms.exception.LMSAuthenticationException;
+import com.sl.lms.service.EmployeeService;
 
 @Component
 public class LoginAuthHelper {
@@ -33,6 +34,12 @@ public class LoginAuthHelper {
 
 	@Value("${lms.admin.users}")
 	private String adminUsersStr;
+	
+	private EmployeeService employeeService;
+	
+	public LoginAuthHelper(EmployeeService employeeService) {
+		this.employeeService = employeeService;
+	}
 	
 	private static List<String> adminUsers = new ArrayList<>();
 	
@@ -52,13 +59,18 @@ public class LoginAuthHelper {
 				LOGGER.debug("login request family_name: {}",attributes.get("family_name"));
 				
 				if (REQUIRED_DOMAIN.equals(attributes.get(DOMAIN_KEY))) {
-					if (adminUsers.contains(attributes.get(EMAIL_KEY))) {
-						mappedAuthorities.add(new OidcUserAuthority(ADMIN_ROLE, idToken, userInfo));
-						mappedAuthorities.add(new OidcUserAuthority(USER_ROLE, idToken, userInfo));
+					if(employeeService.isEmployeeExists(String.valueOf(attributes.get(EMAIL_KEY)), true)) {
+						if (adminUsers.contains(attributes.get(EMAIL_KEY))) {
+							mappedAuthorities.add(new OidcUserAuthority(ADMIN_ROLE, idToken, userInfo));
+							mappedAuthorities.add(new OidcUserAuthority(USER_ROLE, idToken, userInfo));
 
-					} else {
-						mappedAuthorities.add(new OidcUserAuthority(USER_ROLE, idToken, userInfo));
+						} else {
+							mappedAuthorities.add(new OidcUserAuthority(USER_ROLE, idToken, userInfo));
+						}
+					}else {
+						throw new LMSAuthenticationException("User not found! Please contact HR.");
 					}
+					
 				} else {
 					throw new LMSAuthenticationException("Only login from Niviouds domain allowed!");
 				}
