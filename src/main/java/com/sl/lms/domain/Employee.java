@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,36 +32,42 @@ public class Employee implements Serializable{
 	@Column(name = "ID")
 	private Long id;
 	@Column(name = "FIRST_NAME")
-	@NotNull
+	@NotBlank
 	@Size(max=50)
 	private String firstName;
 	@Column(name = "MIDDLE_NAME")
 	@Size(max=50)
 	private String middleName;
 	@Column(name = "LAST_NAME")
-	@NotNull
+	@NotBlank
 	@Size(max=50)
 	private String lastName;
 	@Column(name = "EMP_ID", unique = true)
-	@NotNull
+	@NotBlank
 	@Size(max=10)
 	private String empId;
 	@Column(name = "EMAIL_ID", unique = true)
-	@NotNull
+	@NotBlank
 	@Size(max=255)
 	private String emailId;
 	@Column(name = "DESIGNATION")
-	@NotNull
+	@NotBlank
 	private String designation;
 	@Column(name = "DOB")
 	@NotNull
 	private Date dob;
 	@Column(name = "GENDER")
-	@NotNull
+	@NotBlank
 	private String gender;
 	@Column(name = "CELL_NO")
 	@Size(max=10)
 	private String cellNo;
+	@Column(name = "WORK_PHONE")
+	@Size(max=10)
+	private String workPhone;
+	@Column(name = "WORK_PHONE_EXT")
+	@Size(max=4)
+	private String workPhoneExt;
 	@Column(name = "JOINING_DATE")
 	@NotNull
 	private Date joiningDate;
@@ -72,7 +79,7 @@ public class Employee implements Serializable{
 	@CreationTimestamp
 	private Date createdDate;
 	@Column(name = "CREATED_BY")
-	@NotNull
+	@NotBlank
 	@Size(max=50)
 	private String createdBy;
 	@Column(name = "UPDATED_DATE")
@@ -82,6 +89,7 @@ public class Employee implements Serializable{
 	@Size(max=50)
 	private String updatedBy;
 	@OneToOne(mappedBy="employee", cascade=CascadeType.ALL)
+	@NotNull
 	private EmployeeAddress empAddr;
 	@OneToOne(mappedBy="employee", cascade=CascadeType.ALL)
 	@NotNull

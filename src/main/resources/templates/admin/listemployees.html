@@ -71,7 +71,7 @@
 	            	orderable: false,
 	            	render: function(data, type, row, meta){
 	            		return '<a href="/admin/viewemployeedetails/'+row.id+'"><i class="fa fa-address-card-o" aria-hidden="true" title="view details"></i></a>'+
-	            			   '<a href="/admin/editemployeedetails/'+row.id+'" style="margin-left: 3px"><i class="fa fa-pencil-square-o" aria-hidden="true" title="edit details"></i></a>'+
+	            			   '<a href="/admin/manageemployee/'+row.id+'" style="margin-left: 3px"><i class="fa fa-pencil-square-o" aria-hidden="true" title="edit details"></i></a>'+
 	            			   '<a href="#" onclick="deactiveemp('+row.id+')" style="color:red; margin-left: 3px"><i class="fa fa-ban" aria-hidden="true" title="deactive"></i></a>';
 	            	}
 	            }
@@ -110,5 +110,18 @@
         });
 		
 	}
+</script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+    var empCreateSuccess = /*[[${empCreateSuccess}]]*/ false;
+    if(empCreateSuccess){
+	   	 $.notify({
+		  	title: '<strong>Success!</strong>',
+			message: 'Employee record created successfully.'
+		  },{
+			type: 'success'
+		  });
+    }
+/*]]>*/
 </script>
 </html>

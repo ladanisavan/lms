@@ -55,6 +55,16 @@ td h4{
 									<td><h5><strong>Cell No:</strong></h5></td>
 									<td><h4><small th:text="${employee.cellNo}">1234567890</small></h4></td>
 								</tr>
+								<tr>
+									<td><h5><strong>Work Phone:</strong></h5></td>
+									<td><h4>
+									<span th:if="${employee.workPhoneExt != null}">
+										<small th:text="|(${employee.workPhoneExt}) - |" >(1234)- </small>
+									</span>
+									<span th:if="${employee.workPhone != null}">
+										<small th:text="${employee.workPhone}">1234567890</small>
+									</span></h4></td>
+								</tr>
 							</table>
 						</div>
 					</div>

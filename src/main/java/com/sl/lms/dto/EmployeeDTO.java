@@ -3,9 +3,11 @@ package com.sl.lms.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.Pattern;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,26 +19,30 @@ import lombok.NoArgsConstructor;
 public class EmployeeDTO implements Serializable{
 
 	private Long id;
-	@NotNull
-	@NotBlank
+	@Pattern(regexp="^([a-zA-z]{4,32})$", message="Invalid value")
 	private String firstName;
+	@Pattern(regexp="^([a-zA-z]{0,32})$", message="Invalid value")
 	private String middleName;
-	@NotNull
-	@NotBlank
+	@Pattern(regexp="^([a-zA-z]{4,32})$", message="Invalid value")
 	private String lastName;
-	@NotNull
+	@Pattern(regexp="^([a-zA-z0-9]{4,6})$", message="Invalid value")
 	private String empId;
-	@NotNull
+	@NotBlank(message="Invalid value")
+	@Email(message="Invalid value")
 	private String emailId;
-	@NotNull
+	@NotBlank(message="Invalid value")
 	private String designation;
-	@NotNull
+	@NotNull(message="Invalid value")
 	private Date dob;
-	@NotNull
+	@NotBlank(message="Invalid value")
 	private String gender;
-	@NotNull
+	@Pattern(regexp="^([0-9]{10})$", message="Invalid value")
 	private String cellNo;
-	@NotNull
+	@Pattern(regexp="^([0-9]{0,10})$", message="Invalid value")
+	private String workPhone;
+	@Pattern(regexp="^([0-9]{0,4})$", message="Invalid value")
+	private String workPhoneExt;
+	@NotNull(message="Invalid value")
 	private Date joiningDate;
 	private Date leavingDate;
 	private boolean active;
@@ -44,4 +50,7 @@ public class EmployeeDTO implements Serializable{
 	private String createdBy;
 	private Date updatedDate;
 	private String updatedBy;
+	
+	@Valid
+	private EmployeeAddressDTO empAddr;
 }

@@ -12,11 +12,13 @@ import org.springframework.util.Assert;
 
 import com.sl.lms.configuration.auth.helper.CurrentUserHolder;
 import com.sl.lms.domain.Employee;
+import com.sl.lms.domain.EmployeeLeaveBalance;
 import com.sl.lms.domain.repository.EmployeeRepository;
 import com.sl.lms.domain.specification.EmployeeSpecification;
 import com.sl.lms.domain.specification.SearchCriteria;
 import com.sl.lms.dto.EmployeeDTO;
 import com.sl.lms.service.EmployeeService;
+import com.sl.lms.util.ConverterUtil;
 import com.sl.lms.util.DTResponse;
 
 @Service("employeeService")
@@ -33,6 +35,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee createEmployee(Employee employee) {
+		employee.addEmployeeLeaveBalance(new EmployeeLeaveBalance(0.00f, 0.00f, 0.00f));
+		employee.setCreatedBy(currentUserHolder.currentUserEmail());
+		employee.setActive(true);
 		return empRepo.save(employee);
 	}
 
@@ -63,7 +68,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			specs = defaultActiveSpec;
 		}
 		return new DTResponse<EmployeeDTO>(0, empRepo.countByActive(true), empRepo.count(specs),
-				empRepo.findAll(specs, pageable).stream().map(this::mapToEmployeeDto).collect(Collectors.toList()));
+				empRepo.findAll(specs, pageable).stream().map(emp -> ConverterUtil.convert(emp, false, false)).collect(Collectors.toList()));
 	}
 
 	@Override
@@ -81,11 +86,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return empRepo.findById(id);
 	}
 	
-	private EmployeeDTO mapToEmployeeDto(Employee emp) {
+	/*private EmployeeDTO mapToEmployeeDto(Employee emp) {
 		EmployeeDTO employeeDTO = new EmployeeDTO();
 		BeanUtils.copyProperties(emp, employeeDTO);
 		return employeeDTO;
-	}
+	}*/
 
 	@Override
 	public boolean isEmployeeExists(String emailId, boolean active) {
