@@ -20,7 +20,7 @@
 			</div>
 			<div class="row">
 				<div class="col-lg-12">
-				<form action="#" th:action="@{/admin/createemployee}" th:object="${employeeDTO}" method="post">
+				<form action="#" id="empForm" th:action="@{/admin/createemployee}" th:object="${employeeDTO}" method="post">
 					<div class="panel panel-default">
 						<div class="panel-heading">New Record</div>
 						<div class="panel-body">
@@ -132,15 +132,15 @@
 									</div>
 								</div>
 								<div class="col-sm-4">
-									<div th:class="${#fields.hasErrors('empAddr.city')}? 'form-group required has-error':'form-group required'" >
-										<label class="control-label" for="empAddr.city">City</label> 
+									<div th:class="${#fields.hasErrors('empAddr.country')}? 'form-group required has-error':'form-group required'" >
+										<label class="control-label" for="empAddr.country">Country</label> 
 										<select
-											class="form-control selectpicker" title="select value" th:field="*{empAddr.city}">
-											<option th:value="'Ahmedabad'">Ahmedabad</option>
-											<option th:value="'Rajkot'">Rajkot</option>
-											<option th:value="'Surat'">Surat</option>
+											class="form-control selectpicker" title="select value" id="countryselect" th:field="*{empAddr.country}">
+											<!--<option th:value="'India'">India</option>
+											<option th:value="'USA'">USA</option>-->
+											<option th:each="country : ${countries}" th:data-record-id="${country.id}" th:value="${country.name}" th:text="${country.name}"></option>
 										</select>
-										<span class="control-label" th:if="${#fields.hasErrors('empAddr.city')}" th:errors="*{empAddr.city}">City Error</span>
+										<span class="control-label" th:if="${#fields.hasErrors('empAddr.country')}" th:errors="*{empAddr.country}">Country Error</span>
 									</div>
 								</div>
 							</div>
@@ -149,23 +149,18 @@
 									<div th:class="${#fields.hasErrors('empAddr.state')}? 'form-group required has-error':'form-group required'" >
 										<label class="control-label" for="empAddr.state">State</label> 
 										<select
-											class="form-control selectpicker" title="select value" th:field="*{empAddr.state}">
-											<option th:value="'Gujarat'">Gujarat</option>
-											<option th:value="'Maharashtra'">Maharashtra</option>
-											<option th:value="'Delhi'">Delhi</option>
+											class="form-control selectpicker" title="select value" data-live-search="true" id="stateselect" th:field="*{empAddr.state}">
 										</select>
 										<span class="control-label" th:if="${#fields.hasErrors('empAddr.state')}" th:errors="*{empAddr.state}">State Error</span>
 									</div>
 								</div>
 								<div class="col-sm-4">
-									<div th:class="${#fields.hasErrors('empAddr.country')}? 'form-group required has-error':'form-group required'" >
-										<label class="control-label" for="empAddr.country">Country</label> 
+									<div th:class="${#fields.hasErrors('empAddr.city')}? 'form-group required has-error':'form-group required'" >
+										<label class="control-label" for="empAddr.city">City</label> 
 										<select
-											class="form-control selectpicker" title="select value" th:field="*{empAddr.country}">
-											<option th:value="'India'">India</option>
-											<option th:value="'USA'">USA</option>
+											class="form-control selectpicker" title="select value" data-live-search="true" id="cityselect" th:field="*{empAddr.city}">
 										</select>
-										<span class="control-label" th:if="${#fields.hasErrors('empAddr.country')}" th:errors="*{empAddr.country}">Country Error</span>
+										<span class="control-label" th:if="${#fields.hasErrors('empAddr.city')}" th:errors="*{empAddr.city}">City Error</span>
 									</div>
 								</div>
 								<div class="col-sm-4">
@@ -206,7 +201,7 @@
 							<hr />
 							<div class="row">
 								<div class="col-sm-12 text-center">
-									<button type="submit" class="btn btn-primary">Submit</button>
+									<button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
 									<button type="button" class="btn btn-default"
 										style="margin-left: 10px">Cancel</button>
 								</div>
@@ -220,8 +215,24 @@
 	</div>
 </body>
 <footer th:replace="common/footer :: footer"></footer>
-<script type="text/javascript">
+<script th:inline="javascript">
 	$(function () {
+		$('#submitBtn').click(function(e) {
+			e.preventDefault();
+			BootstrapDialog.confirm({
+	            title: 'WARNING',
+	            message: 'Do you want to create employee record?',
+	            type: BootstrapDialog.TYPE_WARNING,
+	            closeByBackdrop: false,
+	            closeByKeyboard: false,
+	            callback: function(result) {
+	            	if(result){
+	            		$("#empForm").submit();
+	            	}
+	            }
+	        });
+			
+		});
 		$('#dobpicker').datetimepicker({
 			format: 'DD/MM/YYYY',
 			viewMode: 'years'
@@ -231,7 +242,84 @@
 			format: 'DD/MM/YYYY',
 			maxDate: moment().add(15, 'days')
 		});
-		$('[data-toggle="tooltip"]').tooltip({template: "<div class='tooltip row' role='tooltip'> <div class='arrow col-sm-12'></div> <div class='tooltip-inner col-sm-12'> </div> </div>", html: true, placement: "right"}); 
+		$('[data-toggle="tooltip"]').tooltip({template: "<div class='tooltip row' role='tooltip'> <div class='arrow col-sm-12'></div> <div class='tooltip-inner col-sm-12'> </div> </div>", html: true, placement: "right"});
+		$('#countryselect').on('changed.bs.select', function (e) {
+			var countryId = $(this).find('option:selected').data("record-id");
+			getStates(countryId);
+		});
+		$('#countryselect').on('loaded.bs.select', function (e) {
+			var countryId = $(this).find('option:selected').data("record-id");
+			if(countryId > 0){
+				getStates(countryId);
+			}
+		});
+		$('#stateselect').on('changed.bs.select', function (e) {
+			  var stateId = $(this).find('option:selected').data("record-id");
+			  getCities(stateId);
+		});
 	});
+	function getStates(countryId){
+		/*<![CDATA[*/
+			var preSelectedState = /*[[${employeeDTO.empAddr.state}]]*/ null;
+			var preSelectedCity = /*[[${employeeDTO.empAddr.city}]]*/ null;
+		/*]]>*/
+		  $.get("/admin/getstates/"+countryId,null,null,"json")
+		  .done(function(data) {
+			$('#stateselect').empty();
+			$('#cityselect').empty();
+			data.forEach(function(state, i) {
+				if(preSelectedState === state.name){
+					var option = "<option data-record-id= " + state.id + " value = '" + state.name + "' selected>" + state.name +  "</option>";
+				}else{
+					var option = "<option data-record-id= " + state.id + " value = '" + state.name + "'>" + state.name +  "</option>";
+				}
+	            $("#stateselect").append(option);
+	        });
+			$('#cityselect').selectpicker('refresh');
+			$('#stateselect').selectpicker('refresh');
+			if(preSelectedCity != null){
+				var stateId = $('#stateselect').find('option:selected').data("record-id");
+				if(stateId > 0){
+					getCities(stateId);
+				}
+			}
+		  })
+		  .fail(function(data) {
+			  $.notify({
+			  	title: '<strong>Error!</strong>',
+				message: 'Oops something went wrong while loading states. please try again later.'
+			  },{
+				type: 'danger'
+			  });
+		  });
+	}
+	function getCities(stateId){
+		console.log("in getCities");
+		/*<![CDATA[*/
+		var preSelected = /*[[${employeeDTO.empAddr.city}]]*/ null;
+		/*]]>*/
+		$.get("/admin/getcities/"+stateId,null,null,"json")
+		  .done(function(data) {
+			$('#cityselect').empty();
+			data.forEach(function(city, i) {
+				if(preSelected === city.name){
+					var option = "<option data-record-id= " + city.id + " value = '" + city.name + "' selected>" + city.name +  "</option>";
+				}else{
+					var option = "<option data-record-id= " + city.id + " value = '" + city.name + "'>" + city.name +  "</option>";
+				}
+	            $("#cityselect").append(option);
+	        });
+			$('#cityselect').selectpicker('refresh');
+		  })
+		  .fail(function(data) {
+			  $.notify({
+			  	title: '<strong>Error!</strong>',
+				message: 'Oops something went wrong while loading cities. please try again later.'
+			  },{
+				type: 'danger'
+			  });
+		  });
+	}
+
 </script>
 </html>

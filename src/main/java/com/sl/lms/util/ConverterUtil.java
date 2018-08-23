@@ -5,19 +5,26 @@ import org.springframework.util.Assert;
 
 import com.sl.lms.domain.Employee;
 import com.sl.lms.domain.EmployeeAddress;
+import com.sl.lms.domain.EmployeeLeaveBalance;
 import com.sl.lms.dto.EmployeeAddressDTO;
 import com.sl.lms.dto.EmployeeDTO;
+import com.sl.lms.dto.EmployeeLeaveBalanceDTO;
 
 public class ConverterUtil {
 
-	public static Employee convert(EmployeeDTO source, String... ignoreFields) {
+	public static Employee convert(EmployeeDTO source, boolean includeAddr, boolean includeBal, String... ignoreFields) {
 		Assert.isTrue(source != null, "EmployeeDTO object must not be null!");
 		Employee employee = new Employee();
 		BeanUtils.copyProperties(source, employee);
-		if(source.getEmpAddr() != null) {
+		if(source.getEmpAddr() != null && includeAddr) {
 			EmployeeAddress empAddr = new EmployeeAddress();
 			BeanUtils.copyProperties(source.getEmpAddr(), empAddr);
 			employee.addEmployeeAddress(empAddr);
+		}
+		if(source.getLeaveBalance() != null && includeBal) {
+			EmployeeLeaveBalance leaveBalance = new EmployeeLeaveBalance();
+			BeanUtils.copyProperties(source.getLeaveBalance(), leaveBalance);
+			employee.addEmployeeLeaveBalance(leaveBalance);
 		}
 		return employee;
 	}
@@ -30,6 +37,11 @@ public class ConverterUtil {
 			EmployeeAddressDTO empAddrDTO = new EmployeeAddressDTO();
 			BeanUtils.copyProperties(source.getEmpAddr(), empAddrDTO);
 			employeeDTO.setEmpAddr(empAddrDTO);
+		}
+		if(source.getLeaveBalance() != null && includeBal) {
+			EmployeeLeaveBalanceDTO leaveBalanceDTO = new EmployeeLeaveBalanceDTO();
+			BeanUtils.copyProperties(source.getLeaveBalance(), leaveBalanceDTO);
+			employeeDTO.setLeaveBalance(leaveBalanceDTO);
 		}
 		return employeeDTO;
 	}

@@ -53,4 +53,7 @@ public class EmployeeDTO implements Serializable{
 	
 	@Valid
 	private EmployeeAddressDTO empAddr;
+	
+	@Valid
+	private EmployeeLeaveBalanceDTO leaveBalance;
 }

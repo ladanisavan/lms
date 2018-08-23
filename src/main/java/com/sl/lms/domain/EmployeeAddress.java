@@ -53,6 +53,6 @@ public class EmployeeAddress implements Serializable{
 	@Size(max=50)
 	private String country;
 	@Column(name = "ZIPCODE", length=6)
-	@Size(max=6, min=6)
+	@Size(max=6, min=0)
 	private String zipCode;
 }

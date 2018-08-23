@@ -3,7 +3,6 @@ package com.sl.lms.service.impl;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -43,6 +42,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee updateEmployee(Employee employee) {
+		employee.setUpdatedBy(currentUserHolder.currentUserEmail());
 		return empRepo.save(employee);
 	}
 
@@ -59,26 +59,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public DTResponse<EmployeeDTO> searchEmployees(Specification<Employee> specs, Pageable pageable) {
-		// returning only active employee records
-		Specification<Employee> defaultActiveSpec = new EmployeeSpecification(new SearchCriteria("active", ":", true));
+	public DTResponse<EmployeeDTO> searchEmployees(Specification<Employee> specs, Pageable pageable, boolean active) {
+		
+		Specification<Employee> defaultActiveSpec = new EmployeeSpecification(new SearchCriteria("active", ":", active));
 		if (specs != null) {
 			specs = specs.and(defaultActiveSpec);
 		} else {
 			specs = defaultActiveSpec;
 		}
-		return new DTResponse<EmployeeDTO>(0, empRepo.countByActive(true), empRepo.count(specs),
+		return new DTResponse<EmployeeDTO>(0, empRepo.countByActive(active), empRepo.count(specs),
 				empRepo.findAll(specs, pageable).stream().map(emp -> ConverterUtil.convert(emp, false, false)).collect(Collectors.toList()));
-	}
-
-	@Override
-	public boolean deactivateEmployee(Long id) {
-		Optional<Employee> emp = empRepo.findById(id);
-		Assert.isTrue(emp.isPresent(), "Employee record not found by id: " + id);
-		emp.get().setActive(false);
-		emp.get().setUpdatedBy(currentUserHolder.currentUserEmail());
-		empRepo.save(emp.get());
-		return true;
 	}
 
 	@Override
@@ -86,15 +76,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return empRepo.findById(id);
 	}
 	
-	/*private EmployeeDTO mapToEmployeeDto(Employee emp) {
-		EmployeeDTO employeeDTO = new EmployeeDTO();
-		BeanUtils.copyProperties(emp, employeeDTO);
-		return employeeDTO;
-	}*/
-
 	@Override
 	public boolean isEmployeeExists(String emailId, boolean active) {
 		return empRepo.countByEmailIdAndActive(emailId, active)>0;
+	}
+
+	@Override
+	public boolean changeRecordStatus(Long id, boolean active) {
+		Optional<Employee> emp = empRepo.findById(id);
+		Assert.isTrue(emp.isPresent(), "Employee record not found by id: " + id);
+		emp.get().setActive(active);
+		emp.get().setUpdatedBy(currentUserHolder.currentUserEmail());
+		empRepo.save(emp.get());
+		return true;
 	}
 
 }
