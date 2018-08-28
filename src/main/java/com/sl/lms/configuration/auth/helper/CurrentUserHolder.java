@@ -20,5 +20,9 @@ public class CurrentUserHolder{
     public String currentUserEmail() {
         return (String)session.getAttribute("currentUserEmail");
     }
+    
+    public String currentUserName() {
+        return (String)session.getAttribute("currentUserFullName");
+    }
 
 }

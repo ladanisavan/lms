@@ -19,7 +19,7 @@
 	    <ul class="nav navbar-top-links navbar-right">
 	        <li class="dropdown">
 	            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-	                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+	                <span th:text="|(${session.currentUserFullName})|"></span> <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
 	            </a>
 	            <ul class="dropdown-menu dropdown-user">
 	                <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
@@ -40,7 +40,7 @@
 	                    <a th:href="@{/home}"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
 	                </li>
 	                <li>
-	                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Employees<span class="fa arrow"></span></a>
+	                    <a href="#"><i class="fa fa-users fa-fw"></i> Employees<span class="fa arrow"></span></a>
 	                    <ul class="nav nav-second-level">
 	                        <li>
 	                            <a th:href="@{/admin/createemployee}">Create Employee</a>
@@ -51,7 +51,7 @@
 	                    </ul>
 	                </li>
 	                <li sec:authorize="hasAuthority('ADMIN')">
-	                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+	                    <a href="#"><i class="fa fa-sitemap fa-fw"></i> Leave Management<span class="fa arrow"></span></a>
 	                    <ul class="nav nav-second-level">
 	                        <li>
 	                            <a href="#">Second Level Item</a>

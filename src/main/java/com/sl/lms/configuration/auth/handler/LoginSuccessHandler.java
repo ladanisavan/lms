@@ -2,6 +2,7 @@ package com.sl.lms.configuration.auth.handler;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import com.sl.lms.constant.URLConstants;
+import com.sl.lms.domain.repository.EmployeeRepository;
+import com.sl.lms.domain.repository.UserRepository;
 
 @Component
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -28,7 +31,14 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	protected Logger LOGGER = LoggerFactory.getLogger(LoginSuccessHandler.class);
 
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
-
+	private UserRepository userRepo;
+	private EmployeeRepository empRepo;
+	
+	public LoginSuccessHandler(UserRepository userRepo, EmployeeRepository empRepo) {
+		this.userRepo = userRepo;
+		this.empRepo = empRepo;
+	}
+	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
@@ -68,10 +78,18 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	protected void saveCurrentLoginUserDetails(HttpServletRequest request, Authentication authentication) {
 		HttpSession session = request.getSession(false);
 		if(session!=null) {
+			Optional<String> fullName = Optional.empty();
+			String userName = null;
 			if(authentication.getPrincipal() instanceof User) {
-				session.setAttribute("currentUserEmail", ((User)authentication.getPrincipal()).getUsername());
+				userName = ((User)authentication.getPrincipal()).getUsername();
+				fullName = userRepo.getUserFullName(userName);
 			}else if(authentication.getPrincipal() instanceof DefaultOidcUser) {
-				session.setAttribute("currentUserEmail", ((DefaultOidcUser)authentication.getPrincipal()).getAttributes().get("email"));
+				userName = ((DefaultOidcUser)authentication.getPrincipal()).getEmail();
+				fullName = empRepo.getEmployeeFullName(userName);
+			}
+			session.setAttribute("currentUserEmail", userName);
+			if(fullName.isPresent()) {
+				session.setAttribute("currentUserFullName", fullName.get());
 			}
 		}
 	}

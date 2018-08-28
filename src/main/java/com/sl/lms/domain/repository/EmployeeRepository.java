@@ -20,4 +20,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, JpaSp
 	@Modifying
 	@Query("update Employee emp set emp.active = false where emp.id = ?1")
 	int deactivateEmployee(Long id);
+	@Query("SELECT CONCAT(emp.firstName, ' ', emp.lastName) FROM Employee emp WHERE emp.emailId = ?1")
+	Optional<String> getEmployeeFullName(String emailId);
 }
