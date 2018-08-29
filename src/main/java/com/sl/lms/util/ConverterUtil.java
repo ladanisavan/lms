@@ -6,9 +6,12 @@ import org.springframework.util.Assert;
 import com.sl.lms.domain.Employee;
 import com.sl.lms.domain.EmployeeAddress;
 import com.sl.lms.domain.EmployeeLeaveBalance;
+import com.sl.lms.domain.Holiday;
 import com.sl.lms.dto.EmployeeAddressDTO;
 import com.sl.lms.dto.EmployeeDTO;
 import com.sl.lms.dto.EmployeeLeaveBalanceDTO;
+import com.sl.lms.dto.HolidayDTO;
+import com.sl.lms.dto.OfficeDTO;
 
 public class ConverterUtil {
 
@@ -30,7 +33,7 @@ public class ConverterUtil {
 	}
 	
 	public static EmployeeDTO convert(Employee source, boolean includeAddr, boolean includeBal, String... ignoreFields) {
-		Assert.isTrue(source != null, "EmployeeDTO object must not be null!");
+		Assert.isTrue(source != null, "Employee object must not be null!");
 		EmployeeDTO employeeDTO = new EmployeeDTO();
 		BeanUtils.copyProperties(source, employeeDTO);
 		if(source.getEmpAddr() != null && includeAddr) {
@@ -44,6 +47,18 @@ public class ConverterUtil {
 			employeeDTO.setLeaveBalance(leaveBalanceDTO);
 		}
 		return employeeDTO;
+	}
+	
+	public static HolidayDTO convert(Holiday source, String... ignoreFields) {
+		Assert.isTrue(source != null, "Holiday object must not be null!");
+		HolidayDTO holidayDTO = new HolidayDTO();
+		BeanUtils.copyProperties(source, holidayDTO);
+		if(source.getOffice() != null) {
+			OfficeDTO officeDTO = new OfficeDTO();
+			BeanUtils.copyProperties(source.getOffice(), officeDTO);
+			holidayDTO.setOffice(officeDTO);
+		}
+		return holidayDTO;
 	}
 
 }

@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sl.lms.domain.specification.EmployeeSpecificationsBuilder;
+import com.sl.lms.domain.specification.EmployeeSpecsBuilder;
 import com.sl.lms.dto.EmployeeDTO;
 import com.sl.lms.service.EmployeeService;
 import com.sl.lms.service.MasterDataService;
@@ -76,14 +76,14 @@ public class EmployeeController {
 	@RequestMapping(value = "/getemployees", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
 	public @ResponseBody DTResponse<EmployeeDTO> getEmployees(@RequestBody final DataTablesRequest dtRequest) {
 		logger.trace("EmployeeController::getEmployees called");
-		return employeeService.searchEmployees(new EmployeeSpecificationsBuilder().with(dtRequest).build(),
+		return employeeService.searchEmployees(new EmployeeSpecsBuilder().with(dtRequest).build(),
 				new PageRequestBuilder(dtRequest).withPage().withOrder().build(), true);
 	}
 	
 	@RequestMapping(value = "/getinactiveemprecords", produces = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
 	public @ResponseBody DTResponse<EmployeeDTO> getInactiveEmployeeRecords(@RequestBody final DataTablesRequest dtRequest) {
 		logger.trace("EmployeeController::getInactiveEmployeeRecords called");
-		return employeeService.searchEmployees(new EmployeeSpecificationsBuilder().with(dtRequest).build(),
+		return employeeService.searchEmployees(new EmployeeSpecsBuilder().with(dtRequest).build(),
 				new PageRequestBuilder(dtRequest).withPage().withOrder().build(), false);
 	}
 

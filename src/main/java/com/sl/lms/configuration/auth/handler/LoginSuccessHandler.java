@@ -88,8 +88,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 				fullName = empRepo.getEmployeeFullName(userName);
 			}
 			session.setAttribute("currentUserEmail", userName);
+			LOGGER.debug("setting session attribute currentUserEmail: {}",userName);
 			if(fullName.isPresent()) {
 				session.setAttribute("currentUserFullName", fullName.get());
+				LOGGER.debug("setting session attribute currentUserFullName: {}",fullName.get());
 			}
 		}
 	}

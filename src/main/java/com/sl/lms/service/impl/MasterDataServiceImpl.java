@@ -10,10 +10,12 @@ import org.springframework.util.Assert;
 import com.sl.lms.domain.City;
 import com.sl.lms.domain.Country;
 import com.sl.lms.domain.Designation;
+import com.sl.lms.domain.Office;
 import com.sl.lms.domain.State;
 import com.sl.lms.domain.repository.CityRepository;
 import com.sl.lms.domain.repository.CountryRepository;
 import com.sl.lms.domain.repository.DesignationRepository;
+import com.sl.lms.domain.repository.OfficeRepository;
 import com.sl.lms.domain.repository.StateRepository;
 import com.sl.lms.service.MasterDataService;
 
@@ -25,13 +27,15 @@ public class MasterDataServiceImpl implements MasterDataService {
 	private final StateRepository stateRepo;
 	private final CityRepository cityRepo;
 	private final DesignationRepository desigRepo;
+	private final OfficeRepository officeRepo;
 
 	public MasterDataServiceImpl(CountryRepository countryRepo, StateRepository stateRepo, CityRepository cityRepo,
-			DesignationRepository desigRepo) {
+			DesignationRepository desigRepo, OfficeRepository officeRepo) {
 		this.countryRepo = countryRepo;
 		this.stateRepo = stateRepo;
 		this.cityRepo = cityRepo;
 		this.desigRepo = desigRepo;
+		this.officeRepo = officeRepo;
 	}
 
 	@Override
@@ -59,6 +63,11 @@ public class MasterDataServiceImpl implements MasterDataService {
 	@Override
 	public List<Designation> getAllDesignations() {
 		return desigRepo.findAll();
+	}
+
+	@Override
+	public List<Office> getAllOffices() {
+		return officeRepo.findAll();
 	}
 
 }

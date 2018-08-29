@@ -5,6 +5,7 @@ import java.util.List;
 import com.sl.lms.domain.City;
 import com.sl.lms.domain.Country;
 import com.sl.lms.domain.Designation;
+import com.sl.lms.domain.Office;
 import com.sl.lms.domain.State;
 
 public interface MasterDataService {
@@ -13,4 +14,5 @@ public interface MasterDataService {
 	List<State> getStatesForCountry(Long countryId);
 	List<City> getCitiesForState(Long stateId);
 	List<Designation> getAllDesignations();
+	List<Office> getAllOffices();
 }

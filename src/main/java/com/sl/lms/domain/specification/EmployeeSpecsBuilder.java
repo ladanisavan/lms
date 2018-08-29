@@ -12,17 +12,17 @@ import com.google.common.base.Strings;
 import com.sl.lms.domain.Employee;
 import com.sl.lms.util.DataTablesRequest;
 
-public class EmployeeSpecificationsBuilder {
+public class EmployeeSpecsBuilder {
 
-	Logger logger = LoggerFactory.getLogger(EmployeeSpecificationsBuilder.class);
+	Logger logger = LoggerFactory.getLogger(EmployeeSpecsBuilder.class);
 	
 	private final List<SearchCriteria> params;
 	
-	public EmployeeSpecificationsBuilder() {
+	public EmployeeSpecsBuilder() {
 		params = new ArrayList<SearchCriteria>();
 	}
 	
-	public EmployeeSpecificationsBuilder with(DataTablesRequest dtRequest) {
+	public EmployeeSpecsBuilder with(DataTablesRequest dtRequest) {
 		if(!Strings.isNullOrEmpty(dtRequest.getSearch().getValue())) {
 			params.addAll(dtRequest.getColumns().stream()
 					.filter(col -> col.isSearchable() == true)
