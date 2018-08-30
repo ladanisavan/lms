@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "HOLIDAYS")
 @Data
 @NoArgsConstructor
-public class Holiday {
+public class Holiday{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

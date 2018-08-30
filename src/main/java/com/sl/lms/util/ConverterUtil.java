@@ -7,6 +7,7 @@ import com.sl.lms.domain.Employee;
 import com.sl.lms.domain.EmployeeAddress;
 import com.sl.lms.domain.EmployeeLeaveBalance;
 import com.sl.lms.domain.Holiday;
+import com.sl.lms.domain.Office;
 import com.sl.lms.dto.EmployeeAddressDTO;
 import com.sl.lms.dto.EmployeeDTO;
 import com.sl.lms.dto.EmployeeLeaveBalanceDTO;
@@ -59,6 +60,18 @@ public class ConverterUtil {
 			holidayDTO.setOffice(officeDTO);
 		}
 		return holidayDTO;
+	}
+	
+	public static Holiday convert(HolidayDTO source, String... ignoreFields) {
+		Assert.isTrue(source != null, "HolidayDTO object must not be null!");
+		Holiday holiday = new Holiday();
+		BeanUtils.copyProperties(source, holiday);
+		if(source.getOffice() != null) {
+			Office office = new Office();
+			BeanUtils.copyProperties(source.getOffice(), office);
+			holiday.setOffice(office);
+		}
+		return holiday;
 	}
 
 }

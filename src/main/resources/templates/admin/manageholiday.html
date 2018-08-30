@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="common/header :: header"></head>
+<style>
+.form-group.required .control-label:after {
+  content:" *";
+  color:#c41111;
+}
+</style>
+<body>
+	<div id="wrapper">
+		<div th:replace="common/menu :: menu"></div>
+		<div id="page-wrapper">
+			<div class="row">
+				<div class="col-lg-12">
+					<h1 class="page-header"><span th:text="${holidayId}?'Edit Holiday':'Add Holiday'">Title</span></h1>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+				<form action="#" id="empForm" th:action="${holidayId}?@{/admin/editholiday}:@{/admin/addholiday}" th:object="${holidayDTO}" method="post">
+					<input type="hidden" th:field="*{id}">
+					<input type="hidden" th:field="*{office.id}" th:if="${holidayId}">
+					<div class="panel panel-default">
+						<div class="panel-heading">New Record</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-4">
+									<div th:class="${#fields.hasErrors('name')}? 'form-group required has-error':'form-group required'" >
+										<label class="control-label" for="firstname">Name</label> <i class="fa fa-question-circle-o" data-toggle="tooltip" title="<div class='col-sm-12' style='padding: 0px; text-align: left'>1. Length should be 4 to 32.<div><div class='col-sm-12' style='padding: 0px; text-align: left'>2. Should not contain special chars.<div>" aria-hidden="true"></i>
+										<input type="text" class="form-control" th:field="*{name}" th:maxlength="32">
+										<span class="control-label" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-4">
+									<div th:class="${#fields.hasErrors('holidayDate')}? 'form-group required has-error':'form-group required'" >
+										<label class="control-label" for="holidaydate">Holiday Date</label>
+										<div class="input-group date" id="holidaydatepicker">
+											<input type="text" class="form-control" th:field="*{holidayDate}" placeholder="DD/MM/YYYY" th:readonly="${holidayId}"/> <span
+												class="input-group-addon"> <span
+												class="glyphicon glyphicon-calendar"> </span>
+											</span>
+										</div>
+										<span class="control-label" th:if="${#fields.hasErrors('holidayDate')}" th:errors="*{holidayDate}">Holiday Date Error</span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-4">
+									<div th:class="${#fields.hasErrors('office.id')}? 'form-group required has-error':'form-group required'" >
+										<label class="control-label" for="office.id">Office</label> 
+										<select
+											class="form-control selectpicker" id="officeselect" th:field="*{office.id}" th:disabled="${holidayId}">
+											<option th:value="'-1'">All</option>
+											<option th:each="office : ${offices}" th:value="${office.id}" th:text="${office.name}"></option>
+										</select>
+										<span class="control-label" th:if="${#fields.hasErrors('office.id')}" th:errors="*{office.id}">Office Error</span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-4">
+									<div class="checkbox">
+									  <label><input type="checkbox" th:field="*{optional}">Optional</label>
+									</div>
+								</div>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col-sm-12 text-center">
+									<button type="submit" id="submitBtn" class="btn btn-primary">Submit</button>
+									<button type="button" class="btn btn-default"
+										style="margin-left: 10px">Cancel</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<footer th:replace="common/footer :: footer"></footer>
+<script th:inline="javascript">
+/*<![CDATA[*/
+	var mode = /*[[${holidayId}]]*/ null;
+	$(function () {
+		var msg = "Do you want to create holiday record?";
+		if(mode != null){
+			msg = "Do you want to update holiday record?";
+		}
+		$('#submitBtn').click(function(e) {
+			e.preventDefault();
+			BootstrapDialog.confirm({
+	            title: 'WARNING',
+	            message: msg,
+	            type: BootstrapDialog.TYPE_WARNING,
+	            closeByBackdrop: false,
+	            closeByKeyboard: false,
+	            callback: function(result) {
+	            	if(result){
+	            		$("#empForm").submit();
+	            	}
+	            }
+	        });
+			
+		});
+		$('[data-toggle="tooltip"]').tooltip({template: "<div class='tooltip row' role='tooltip'> <div class='arrow col-sm-12'></div> <div class='tooltip-inner col-sm-12'> </div> </div>", html: true, placement: "right"});
+		$('#holidaydatepicker').datetimepicker({
+			format: 'DD/MM/YYYY'
+		});
+		
+	});
+/*]]>*/
+</script>
+</html>
